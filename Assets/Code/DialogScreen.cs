@@ -23,6 +23,7 @@ public class DialogScreen : MonoBehaviour {
 
 	public void ShowDialog(DialogLine dialog) {
 		currentDialog = dialog;
+		dialog.onShow.Invoke();
 
 		dialogText.text = dialog.text;
 		charNameText.text = dialog.characterName;
@@ -52,6 +53,7 @@ public class DialogScreen : MonoBehaviour {
 	}
 
 	public void SelectChoice(int index) {
+		currentDialog.choices[index].onChosen.Invoke();
 		ShowDialog(currentDialog.choices[index].nextLine);
 	}
 

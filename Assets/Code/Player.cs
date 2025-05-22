@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
 	public PlayerInput input;
 	public CharacterController controller;
 	public CameraManager cameraManager;
+	public Animator animator;
 
 	public Interactable currentInteractable;
 
@@ -32,13 +33,15 @@ public class Player : MonoBehaviour {
 	}
 
 	private void OnInteracted(InputAction.CallbackContext obj) {
-		if(currentInteractable != null)
+		if(currentInteractable != null) {
 			currentInteractable.Interact();
+			animator.SetTrigger("interact");
+		}
 	}
 
 	// Update is called once per frame
 	void Update() {
-		if(moveAction.WasPressedThisFrame()){
+		if(moveAction.WasPressedThisFrame()) {
 			referenceCamera = cameraManager.activeCamera.transform;
 		}
 
@@ -55,13 +58,13 @@ public class Player : MonoBehaviour {
 
 		if(direction != Vector3.zero)
 			transform.forward = Vector3.Slerp(transform.forward, direction, 10 * Time.deltaTime);
-		
+
 
 		direction *= speed;
 
 		//yVelocity = yVelocity - gravity * Time.deltaTime;
 		yVelocity -= gravity * Time.deltaTime;
-		
+
 		direction.y = yVelocity;
 
 		if(controller.Move(direction * Time.deltaTime) == CollisionFlags.Below)
@@ -70,18 +73,21 @@ public class Player : MonoBehaviour {
 		//if(controller.isGrounded)
 		//	yVelocity = 0;
 
+
+		animator.SetFloat("speed", Mathf.Abs(moveInput.magnitude * speed));
+
 	}
 
 	private void OnTriggerEnter(Collider other) {
 		Interactable interactable = other.GetComponent<Interactable>(); //Interactable Component bei 'other' suchen
-		if(interactable != null){ //wenn 'other' kein Interactable hat, ist die Variabel null
+		if(interactable != null) { //wenn 'other' kein Interactable hat, ist die Variabel null
 			currentInteractable = interactable;
 		}
 	}
 
 	private void OnTriggerExit(Collider other) {
 		Interactable interactable = other.GetComponent<Interactable>(); //Interactable Component bei 'other' suchen
-		if(interactable != null){ //wenn 'other' kein Interactable hat, ist die Variabel null
+		if(interactable != null) { //wenn 'other' kein Interactable hat, ist die Variabel null
 			currentInteractable = null;
 		}
 	}

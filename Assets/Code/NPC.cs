@@ -14,4 +14,8 @@ public class NPC : MonoBehaviour {
 	public void StartDialog(){
 		dialogScreen.ShowDialog(nextLine);
 	}
+
+	public void SetNextLine(DialogLine line){
+		nextLine = line;
+	}
 }
