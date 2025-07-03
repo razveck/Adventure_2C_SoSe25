@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 
 public class DialogScreen : MonoBehaviour {
 
+	private Coroutine typewriter;
 	private DialogLine currentDialog;
 
 	public TextMeshProUGUI dialogText;
@@ -48,8 +50,23 @@ public class DialogScreen : MonoBehaviour {
 
 
 		gameObject.SetActive(true);
+		//StopAllCoroutines();
+		if(typewriter != null)
+			StopCoroutine(typewriter);
+
+		typewriter = StartCoroutine(TypewriterCoroutine());
 
 		input.SwitchCurrentActionMap("UI");
+	}
+
+	IEnumerator TypewriterCoroutine(){
+		dialogText.maxVisibleCharacters = 0;
+		for(int i = 0; i < dialogText.text.Length; i++) {
+			dialogText.maxVisibleCharacters++;
+			yield return new WaitForSecondsRealtime(0.05f);
+		}
+
+		dialogText.maxVisibleCharacters = 99999999;
 	}
 
 	public void SelectChoice(int index) {

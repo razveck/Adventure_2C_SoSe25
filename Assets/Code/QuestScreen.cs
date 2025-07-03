@@ -37,6 +37,11 @@ public class QuestScreen : MonoBehaviour {
 		if(quest.isCompleted || quest != currentQuest)
 			return; //funktion abbrechen
 
+		//if(quest is QuestWithCount q){
+		//	if(q.count < q.goal)
+		//		return;
+		//}
+
 		quest.isCompleted = true;
 		quest.onCompleted.Invoke();
 		if(quest.nextQuest == null){
